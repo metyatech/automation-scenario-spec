@@ -35,6 +35,26 @@ This repository defines the shared scenario format that acts as the single sourc
 
 Use your preferred JSON Schema validator against `schema/scenario.schema.json`.
 
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Format files:
+
+```bash
+npm run format
+```
+
+Verify everything (lint + validate examples):
+
+```bash
+npm run verify
+```
+
 ## Links
 
 - License: `LICENSE`

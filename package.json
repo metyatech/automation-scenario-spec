@@ -1,0 +1,36 @@
+{
+  "name": "@metyatech/automation-scenario-spec",
+  "version": "1.0.0",
+  "description": "Canonical machine-readable specification for automation scenarios",
+  "type": "module",
+  "main": "schema/scenario.schema.json",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metyatech/automation-scenario-spec.git"
+  },
+  "author": "metyatech",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/metyatech/automation-scenario-spec/issues"
+  },
+  "homepage": "https://github.com/metyatech/automation-scenario-spec#readme",
+  "scripts": {
+    "format": "prettier --write .",
+    "lint": "prettier --check .",
+    "validate": "ajv validate --spec=draft2019 -c ajv-formats -s schema/scenario.schema.json -d \"examples/*.json\"",
+    "verify": "npm run lint && npm run validate",
+    "postinstall": "compose-agentsmd"
+  },
+  "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1",
+    "compose-agentsmd": "latest",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,16 +1,10 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "https://github.com/metyatech/automation-scenario-spec/schema/scenario.schema.json",
   "title": "Automation Scenario",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "scenario_id",
-    "name",
-    "target",
-    "steps"
-  ],
+  "required": ["schema_version", "scenario_id", "name", "target", "steps"],
   "properties": {
     "schema_version": {
       "type": "string",
