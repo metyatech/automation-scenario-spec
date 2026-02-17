@@ -9,12 +9,13 @@
     "scenario_id",
     "name",
     "target",
+    "variables",
     "steps"
   ],
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "scenario_id": {
       "type": "string",
@@ -25,17 +26,55 @@
       "type": "string",
       "minLength": 1
     },
+    "description": {
+      "type": "string"
+    },
     "created_at": {
       "type": "string",
       "format": "date-time"
     },
-    "target": {
+    "updated_at": {
       "type": "string",
-      "enum": ["unity", "web"]
+      "format": "date-time"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "target": {
+      "$ref": "#/$defs/target"
     },
     "metadata": {
       "type": "object",
       "additionalProperties": true
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/variable"
+      }
+    },
+    "profiles": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-z0-9][a-z0-9-]*$": {
+          "$ref": "#/$defs/profile"
+        }
+      }
+    },
+    "execution": {
+      "$ref": "#/$defs/execution"
+    },
+    "recording": {
+      "$ref": "#/$defs/recording"
+    },
+    "outputs": {
+      "$ref": "#/$defs/outputs"
     },
     "steps": {
       "type": "array",
@@ -43,13 +82,374 @@
       "items": {
         "$ref": "#/$defs/step"
       }
+    },
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true
     }
   },
   "$defs": {
-    "step": {
+    "target": {
+      "type": "string",
+      "enum": [
+        "unity",
+        "web",
+        "desktop",
+        "hybrid"
+      ]
+    },
+    "variable": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "title", "action", "params"],
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "path",
+            "url",
+            "enum",
+            "json",
+            "secret"
+          ]
+        },
+        "required": {
+          "type": "boolean",
+          "default": false
+        },
+        "nullable": {
+          "type": "boolean",
+          "default": false
+        },
+        "default": {
+          "$ref": "#/$defs/value"
+        },
+        "enum_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          },
+          "minItems": 1
+        },
+        "validation": {
+          "$ref": "#/$defs/variableValidation"
+        },
+        "runtime": {
+          "$ref": "#/$defs/variableRuntime"
+        },
+        "bindings": {
+          "$ref": "#/$defs/variableBindings"
+        }
+      }
+    },
+    "variableValidation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pattern": {
+          "type": "string"
+        },
+        "min_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_length": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        }
+      }
+    },
+    "variableRuntime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "prompt": {
+          "type": "string"
+        },
+        "masked": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_override": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "variableBindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "env": {
+          "type": "string",
+          "pattern": "^[A-Z_][A-Z0-9_]*$"
+        },
+        "cli_arg": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "extends": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "variables": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "attach",
+            "launch"
+          ]
+        },
+        "default_timeout_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "default_poll_interval_seconds": {
+          "type": "number",
+          "minimum": 0.01
+        },
+        "default_retry": {
+          "$ref": "#/$defs/retryPolicy"
+        },
+        "attach": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "window_hint_var": {
+              "type": "string"
+            },
+            "require_visible_window": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "launch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "unity_project_path_var": {
+              "type": "string"
+            },
+            "unity_executable_var": {
+              "type": "string"
+            },
+            "create_project_if_missing": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        }
+      }
+    },
+    "recording": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "selector_priority": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "unity_hierarchy",
+              "uia",
+              "web",
+              "image",
+              "coordinate"
+            ]
+          }
+        },
+        "auto_wait_policy": {
+          "type": "string",
+          "enum": [
+            "none",
+            "stable-only",
+            "runtime-default"
+          ]
+        },
+        "record_overlay_enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "markdown": {
+          "$ref": "#/$defs/markdownOutput"
+        },
+        "screenshots": {
+          "$ref": "#/$defs/screenshotOutput"
+        },
+        "video": {
+          "$ref": "#/$defs/videoOutput"
+        },
+        "trace": {
+          "$ref": "#/$defs/traceOutput"
+        }
+      }
+    },
+    "markdownOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "locale": {
+          "type": "string",
+          "minLength": 2
+        },
+        "include_step_data": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "screenshotOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "png",
+            "jpg"
+          ]
+        },
+        "capture_before_action": {
+          "type": "boolean",
+          "default": false
+        },
+        "capture_after_action": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "videoOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "fps": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "codec": {
+          "type": "string"
+        },
+        "include_annotations": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "traceOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "level": {
+          "type": "string",
+          "enum": [
+            "minimal",
+            "standard",
+            "verbose"
+          ]
+        },
+        "include_variables": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "step": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/actionStep"
+        },
+        {
+          "$ref": "#/$defs/controlStep"
+        },
+        {
+          "$ref": "#/$defs/groupStep"
+        }
+      ]
+    },
+    "baseStep": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "title",
+        "kind"
+      ],
       "properties": {
         "id": {
           "type": "string",
@@ -63,25 +463,519 @@
         "description": {
           "type": "string"
         },
-        "action": {
+        "kind": {
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "condition": {
+          "type": "string"
+        },
+        "continue_on_error": {
+          "type": "boolean",
+          "default": false
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/annotation"
+          }
+        }
+      }
+    },
+    "actionStep": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "action"
+          ],
+          "properties": {
+            "kind": {
+              "const": "action"
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "open_url",
+                "click",
+                "double_click",
+                "right_click",
+                "drag_drop",
+                "type_text",
+                "press_keys",
+                "open_menu",
+                "select_hierarchy",
+                "wait_for",
+                "assert",
+                "screenshot",
+                "start_video",
+                "stop_video",
+                "emit_annotation",
+                "run_subflow"
+              ]
+            },
+            "target": {
+              "$ref": "#/$defs/selector"
+            },
+            "input": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "expect": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "timing": {
+              "$ref": "#/$defs/timingPolicy"
+            },
+            "retry": {
+              "$ref": "#/$defs/retryPolicy"
+            },
+            "capture": {
+              "$ref": "#/$defs/capturePolicy"
+            }
+          }
+        }
+      ]
+    },
+    "controlStep": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "control"
+          ],
+          "properties": {
+            "kind": {
+              "const": "control"
+            },
+            "control": {
+              "type": "string",
+              "enum": [
+                "if",
+                "for_each",
+                "while",
+                "try",
+                "parallel",
+                "break",
+                "continue",
+                "return"
+              ]
+            },
+            "expression": {
+              "type": "string"
+            },
+            "items_expression": {
+              "type": "string"
+            },
+            "item_variable": {
+              "type": "string",
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+            },
+            "max_iterations": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "branches": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/branch"
+              }
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/step"
+              }
+            },
+            "catch_steps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/step"
+              }
+            },
+            "finally_steps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/step"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "groupStep": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/baseStep"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "steps"
+          ],
+          "properties": {
+            "kind": {
+              "const": "group"
+            },
+            "steps": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/step"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "branch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "when",
+        "steps"
+      ],
+      "properties": {
+        "when": {
+          "type": "string"
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        }
+      }
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy"
+      ],
+      "properties": {
+        "strategy": {
           "type": "string",
           "enum": [
-            "open_url",
-            "click",
-            "drag",
-            "type",
-            "wait",
-            "shortcut",
-            "menu",
-            "keys",
-            "screenshot"
+            "uia",
+            "web",
+            "unity_hierarchy",
+            "image",
+            "coordinate"
           ]
         },
-        "params": {
+        "uia": {
+          "$ref": "#/$defs/uiaSelector"
+        },
+        "web": {
+          "$ref": "#/$defs/webSelector"
+        },
+        "unity_hierarchy": {
+          "$ref": "#/$defs/unityHierarchySelector"
+        },
+        "image": {
+          "$ref": "#/$defs/imageSelector"
+        },
+        "coordinate": {
+          "$ref": "#/$defs/coordinateSelector"
+        },
+        "fallbacks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selector"
+          }
+        }
+      }
+    },
+    "uiaSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "automation_id": {
+          "type": "string"
+        },
+        "class_name": {
+          "type": "string"
+        },
+        "control_type": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "webSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "css": {
+          "type": "string"
+        },
+        "xpath": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "frame": {
+          "type": "string"
+        }
+      }
+    },
+    "unityHierarchySelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scene": {
+          "type": "string"
+        },
+        "match_mode": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "contains"
+          ]
+        }
+      }
+    },
+    "imageSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset"
+      ],
+      "properties": {
+        "asset": {
+          "type": "string",
+          "minLength": 1
+        },
+        "threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "region": {
+          "$ref": "#/$defs/screenRegion"
+        }
+      }
+    },
+    "coordinateSelector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "y_ratio": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "anchor_window_hint": {
+          "type": "string"
+        }
+      }
+    },
+    "screenRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "timingPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "timeout_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "poll_interval_seconds": {
+          "type": "number",
+          "minimum": 0.01
+        },
+        "stability_ms": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "retryPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "interval_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "timeout",
+              "not_found",
+              "assertion",
+              "network",
+              "any"
+            ]
+          }
+        }
+      }
+    },
+    "capturePolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "before": {
+          "type": "boolean",
+          "default": false
+        },
+        "after": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "highlight_box",
+            "arrow",
+            "label",
+            "click_pulse",
+            "drag_arrow",
+            "number_badge"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "from": {
+          "$ref": "#/$defs/annotationPoint"
+        },
+        "to": {
+          "$ref": "#/$defs/annotationPoint"
+        },
+        "box": {
+          "$ref": "#/$defs/annotationBox"
+        },
+        "style": {
           "type": "object",
           "additionalProperties": true
         }
       }
+    },
+    "annotationPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        }
+      }
+    },
+    "annotationBox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "value": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
     }
   }
 }
