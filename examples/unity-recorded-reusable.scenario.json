@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0.0",
+  "scenario_id": "unity-recorded-reusable",
+  "name": "Unity Recorded Reusable Example",
+  "description": "Example scenario shaped like GUI recording output: variable-first hierarchy selectors + multi-strategy UIA/coordinate fallbacks for cross-project reuse.",
+  "target": "unity",
+  "tags": [
+    "unity",
+    "recorded",
+    "variable-first",
+    "fallbacks"
+  ],
+  "variables": [
+    {
+      "id": "unity_window_hint",
+      "type": "string",
+      "default": "Unity"
+    },
+    {
+      "id": "avatar_root",
+      "type": "string",
+      "default": "Ryuon_ComeBody_Human"
+    },
+    {
+      "id": "hier_hair_tail",
+      "type": "string",
+      "default": "Hair/Tail"
+    }
+  ],
+  "profiles": {
+    "ryuon": {
+      "description": "Recorded project profile (as-captured).",
+      "variables": {
+        "avatar_root": "Ryuon_ComeBody_Human",
+        "hier_hair_tail": "Hair/Tail"
+      }
+    },
+    "sample-avatar": {
+      "description": "Another project profile (override only the parts that differ).",
+      "variables": {
+        "avatar_root": "SampleAvatarRoot",
+        "hier_hair_tail": "BeastParts_Tail/Collar"
+      }
+    }
+  },
+  "execution": {
+    "mode": "attach",
+    "attach": {
+      "window_hint_var": "unity_window_hint",
+      "require_visible_window": true
+    }
+  },
+  "steps": [
+    {
+      "id": "wait-unity-window",
+      "title": "Wait Unity window",
+      "kind": "action",
+      "action": "wait_for",
+      "target": {
+        "strategy": "uia",
+        "uia": {
+          "title": "${unity_window_hint}"
+        }
+      },
+      "timing": {
+        "timeout_seconds": 30,
+        "poll_interval_seconds": 0.5
+      }
+    },
+    {
+      "id": "click-file-menu",
+      "title": "Click File menu (UIA primary, coordinate fallback)",
+      "kind": "action",
+      "action": "click",
+      "target": {
+        "strategy": "uia",
+        "uia": {
+          "automation_id": "MainMenuFile",
+          "class_name": "MenuItem",
+          "control_type": "MenuItem"
+        },
+        "fallbacks": [
+          {
+            "strategy": "uia",
+            "uia": {
+              "title": "File",
+              "control_type": "MenuItem"
+            }
+          },
+          {
+            "strategy": "coordinate",
+            "coordinate": {
+              "x_ratio": 0.08,
+              "y_ratio": 0.03,
+              "anchor_window_hint": "${unity_window_hint}"
+            }
+          }
+        ]
+      },
+      "timing": {
+        "timeout_seconds": 10,
+        "stability_ms": 200
+      }
+    },
+    {
+      "id": "select-hierarchy-tail",
+      "title": "Select hierarchy target (variable-first)",
+      "kind": "action",
+      "action": "click",
+      "target": {
+        "strategy": "unity_hierarchy",
+        "unity_hierarchy": {
+          "path": "${avatar_root}/${hier_hair_tail}",
+          "match_mode": "exact"
+        },
+        "fallbacks": [
+          {
+            "strategy": "unity_hierarchy",
+            "unity_hierarchy": {
+              "path": "*/${hier_hair_tail}",
+              "match_mode": "exact"
+            }
+          }
+        ]
+      },
+      "timing": {
+        "timeout_seconds": 4
+      }
+    }
+  ]
+}
+

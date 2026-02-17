@@ -22,6 +22,7 @@ This repository defines the shared scenario format that acts as the single sourc
   - `examples/unity-basic.scenario.json`
   - `examples/web-basic.scenario.json`
   - `examples/unity-cross-project.scenario.json`
+  - `examples/unity-recorded-reusable.scenario.json`
 
 ## 2.0.0 Focus
 
