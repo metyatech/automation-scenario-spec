@@ -439,3 +439,38 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/writing-and-documentation
 ## Markdown linking
 
 - When a Markdown document links to a local file, use a path relative to the Markdown file.
+
+Source: github:metyatech/agent-rules@HEAD/rules/domains/cli/cli-standards.md
+
+# CLI standards
+
+- Provide --help/-h with clear usage, options, and examples; include required parameters in examples.
+- Provide --version (use -V); reserve -v for --verbose.
+- Support stdin/stdout piping; allow output redirection (e.g., --output for file creation).
+- Offer machine-readable output (e.g., --json) when emitting structured data.
+- For modifying/deleting actions, provide --dry-run and an explicit bypass (--yes/--force).
+- Provide controllable logging (--quiet, --verbose, or --trace).
+- Use deterministic exit codes (0 success, non-zero failure) and avoid silent fallbacks.
+- For JSON configuration, define/update a JSON Schema and validate config on load.
+- For interactive CLI prompts, provide required context before asking; for yes/no prompts, Enter means "Yes" and "n" means "No".
+
+Source: github:metyatech/agent-rules@HEAD/rules/domains/node/module-system.md
+
+# Node module system (ESM)
+
+- Default to TypeScript (.ts/.tsx); use JavaScript only for tool-required config files.
+- Always set "type": "module" in package.json.
+- Prefer ESM with .js extensions for JavaScript config/scripts (e.g., next.config.js as ESM).
+
+Source: github:metyatech/agent-rules@HEAD/rules/domains/node/npm-packages.md
+
+# Node package publishing
+
+- For scoped npm packages, set publishConfig.access = "public".
+- Set files to constrain the published contents.
+- If a clean npm install is insufficient, use prepare (or equivalent) to build.
+
+## Verification
+
+- Use npm pack --dry-run to inspect the package contents.
+- Run npm test when tests exist.
