@@ -1,0 +1,16 @@
+{
+  "name": "automation-scenario-spec",
+  "version": "0.1.0",
+  "description": "JSON/YAML schema specification for automation scenarios",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "npm run format:check",
+    "verify": "npm run format:check"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}
