@@ -8,9 +8,17 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "npm run format:check",
-    "verify": "npm run format:check"
+    "verify": "npm run format:check",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.0.0"
+  },
+  "lint-staged": {
+    "*.{json,yaml,yml,md}": [
+      "prettier --check"
+    ]
   }
 }
