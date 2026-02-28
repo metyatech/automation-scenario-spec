@@ -54,6 +54,24 @@ Design document:
 
 Use your preferred JSON Schema validator against `schema/scenario.schema.json`.
 
+## Development
+
+### Prerequisites
+
+- Node.js 18+
+
+### Setup
+
+```bash
+npm install
+```
+
+### Commands
+
+- `npm run lint`: Check formatting
+- `npm run format`: Fix formatting
+- `npm run validate`: Validate examples against the schema
+
 ## Links
 
 - License: `LICENSE`
