@@ -8,10 +8,14 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "npm run format:check",
-    "verify": "npm run format:check",
+    "validate": "ajv validate -s schema/scenario.schema.json -d \"examples/*.scenario.json\" --spec=draft2020 -c ajv-formats --strict=false",
+    "test": "npm run validate",
+    "verify": "npm run format:check && npm run validate",
     "prepare": "husky"
   },
   "devDependencies": {
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.0.0"
