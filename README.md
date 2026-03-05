@@ -1,10 +1,12 @@
 # automation-scenario-spec
 
-Canonical machine-readable specification for automation scenarios used to generate executable flows and human-facing guide artifacts.
+Canonical machine-readable specification for automation scenarios used to
+generate executable flows and human-facing guide artifacts.
 
 ## Overview
 
-This repository defines the shared scenario format that acts as the single source of truth for:
+This repository defines the shared scenario format that acts as the single
+source of truth for:
 
 - Robot Framework suite generation
 - Markdown guide generation
@@ -26,12 +28,14 @@ This repository defines the shared scenario format that acts as the single sourc
 
 ## 2.0.0 Focus
 
-`2.0.0` is designed for Power Automate style growth while staying practical in real projects:
+`2.0.0` is designed for Power Automate style growth while staying practical
+in real projects:
 
 - variable-first reuse across projects/environments,
 - profile-based value overrides without scenario duplication,
 - action/control/group step model for advanced flow composition,
-- explicit selector strategies (`uia`, `web`, `unity_hierarchy`, `image`, `coordinate`),
+- explicit selector strategies (`uia`, `web`, `unity_hierarchy`, `image`,
+  `coordinate`),
 - first-class annotation metadata for markdown/image/video rendering.
 
 Design document:
@@ -52,11 +56,23 @@ Design document:
 
 ## Validation
 
-Use your preferred JSON Schema validator against `schema/scenario.schema.json`.
+Run the project's validation suite using the repo-standard commands
+(requires Node.js):
+
+```powershell
+# Install dependencies
+npm install
+
+# Run schema validation on all examples
+npm run validate
+```
+
+Alternatively, use your preferred JSON Schema validator against
+`schema/scenario.schema.json`.
 
 ## Links
 
 - License: `LICENSE`
 - Changelog: `CHANGELOG.md`
-- Security Policy: `SECURITY.md`
-- Contributing Guide: `CONTRIBUTING.md`
+- Contributing: `CONTRIBUTING.md`
+- Security: `SECURITY.md`
