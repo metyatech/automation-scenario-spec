@@ -4,11 +4,7 @@
   "name": "Unity Tail Adjust Cross Project",
   "description": "Reusable Unity hierarchy flow that can run against multiple avatar projects via variables.",
   "target": "unity",
-  "tags": [
-    "unity",
-    "variable-first",
-    "cross-project"
-  ],
+  "tags": ["unity", "variable-first", "cross-project"],
   "variables": [
     {
       "id": "unity_project_path",
@@ -43,11 +39,7 @@
       "description": "Relative hierarchy paths under avatar_root to be selected in sequence.",
       "type": "json",
       "required": true,
-      "default": [
-        "BeastParts_Ear_L",
-        "BeastParts_Ear_R",
-        "BeastParts_Tail"
-      ]
+      "default": ["BeastParts_Ear_L", "BeastParts_Ear_R", "BeastParts_Tail"]
     },
     {
       "id": "post_select_shortcut",
@@ -63,11 +55,7 @@
       "variables": {
         "unity_project_path": "D:/VRChatProjects/Ryuon",
         "avatar_root": "Ryuon_ComeBody_Human",
-        "target_parts": [
-          "Hair_Parts",
-          "BeastParts_Tail",
-          "ComeBody_Armature"
-        ]
+        "target_parts": ["Hair_Parts", "BeastParts_Tail", "ComeBody_Armature"]
       }
     },
     "sample-avatar": {
@@ -75,11 +63,7 @@
       "variables": {
         "unity_project_path": "D:/VRChatProjects/SampleAvatar",
         "avatar_root": "SampleAvatarRoot",
-        "target_parts": [
-          "Ear_L",
-          "Ear_R",
-          "Tail"
-        ]
+        "target_parts": ["Ear_L", "Ear_R", "Tail"]
       }
     }
   },
@@ -90,10 +74,7 @@
     "default_retry": {
       "attempts": 3,
       "interval_seconds": 1,
-      "on": [
-        "timeout",
-        "not_found"
-      ]
+      "on": ["timeout", "not_found"]
     },
     "attach": {
       "window_hint_var": "unity_window_hint",
@@ -168,10 +149,7 @@
           "retry": {
             "attempts": 45,
             "interval_seconds": 1,
-            "on": [
-              "timeout",
-              "not_found"
-            ]
+            "on": ["timeout", "not_found"]
           },
           "annotations": [
             {

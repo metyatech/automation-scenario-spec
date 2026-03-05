@@ -4,14 +4,7 @@
   "title": "Automation Scenario",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "scenario_id",
-    "name",
-    "target",
-    "variables",
-    "steps"
-  ],
+  "required": ["schema_version", "scenario_id", "name", "target", "variables", "steps"],
   "properties": {
     "schema_version": {
       "type": "string",
@@ -91,20 +84,12 @@
   "$defs": {
     "target": {
       "type": "string",
-      "enum": [
-        "unity",
-        "web",
-        "desktop",
-        "hybrid"
-      ]
+      "enum": ["unity", "web", "desktop", "hybrid"]
     },
     "variable": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "type"
-      ],
+      "required": ["id", "type"],
       "properties": {
         "id": {
           "type": "string",
@@ -247,10 +232,7 @@
       "properties": {
         "mode": {
           "type": "string",
-          "enum": [
-            "attach",
-            "launch"
-          ]
+          "enum": ["attach", "launch"]
         },
         "default_timeout_seconds": {
           "type": "number",
@@ -302,22 +284,12 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [
-              "unity_hierarchy",
-              "uia",
-              "web",
-              "image",
-              "coordinate"
-            ]
+            "enum": ["unity_hierarchy", "uia", "web", "image", "coordinate"]
           }
         },
         "auto_wait_policy": {
           "type": "string",
-          "enum": [
-            "none",
-            "stable-only",
-            "runtime-default"
-          ]
+          "enum": ["none", "stable-only", "runtime-default"]
         },
         "record_overlay_enabled": {
           "type": "boolean",
@@ -371,10 +343,7 @@
         },
         "format": {
           "type": "string",
-          "enum": [
-            "png",
-            "jpg"
-          ]
+          "enum": ["png", "jpg"]
         },
         "capture_before_action": {
           "type": "boolean",
@@ -417,11 +386,7 @@
         },
         "level": {
           "type": "string",
-          "enum": [
-            "minimal",
-            "standard",
-            "verbose"
-          ]
+          "enum": ["minimal", "standard", "verbose"]
         },
         "include_variables": {
           "type": "boolean",
@@ -445,11 +410,7 @@
     "baseStep": {
       "type": "object",
       "additionalProperties": true,
-      "required": [
-        "id",
-        "title",
-        "kind"
-      ],
+      "required": ["id", "title", "kind"],
       "properties": {
         "id": {
           "type": "string",
@@ -492,10 +453,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "kind",
-            "action"
-          ],
+          "required": ["kind", "action"],
           "properties": {
             "kind": {
               "const": "action"
@@ -552,26 +510,14 @@
         },
         {
           "type": "object",
-          "required": [
-            "kind",
-            "control"
-          ],
+          "required": ["kind", "control"],
           "properties": {
             "kind": {
               "const": "control"
             },
             "control": {
               "type": "string",
-              "enum": [
-                "if",
-                "for_each",
-                "while",
-                "try",
-                "parallel",
-                "break",
-                "continue",
-                "return"
-              ]
+              "enum": ["if", "for_each", "while", "try", "parallel", "break", "continue", "return"]
             },
             "expression": {
               "type": "string"
@@ -622,10 +568,7 @@
         },
         {
           "type": "object",
-          "required": [
-            "kind",
-            "steps"
-          ],
+          "required": ["kind", "steps"],
           "properties": {
             "kind": {
               "const": "group"
@@ -644,10 +587,7 @@
     "branch": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "when",
-        "steps"
-      ],
+      "required": ["when", "steps"],
       "properties": {
         "when": {
           "type": "string"
@@ -663,19 +603,11 @@
     "selector": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "strategy"
-      ],
+      "required": ["strategy"],
       "properties": {
         "strategy": {
           "type": "string",
-          "enum": [
-            "uia",
-            "web",
-            "unity_hierarchy",
-            "image",
-            "coordinate"
-          ]
+          "enum": ["uia", "web", "unity_hierarchy", "image", "coordinate"]
         },
         "uia": {
           "$ref": "#/$defs/uiaSelector"
@@ -749,9 +681,7 @@
     "unityHierarchySelector": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "path"
-      ],
+      "required": ["path"],
       "properties": {
         "path": {
           "type": "string",
@@ -762,19 +692,14 @@
         },
         "match_mode": {
           "type": "string",
-          "enum": [
-            "exact",
-            "contains"
-          ]
+          "enum": ["exact", "contains"]
         }
       }
     },
     "imageSelector": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "asset"
-      ],
+      "required": ["asset"],
       "properties": {
         "asset": {
           "type": "string",
@@ -863,13 +788,7 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": [
-              "timeout",
-              "not_found",
-              "assertion",
-              "network",
-              "any"
-            ]
+            "enum": ["timeout", "not_found", "assertion", "network", "any"]
           }
         }
       }
@@ -891,20 +810,11 @@
     "annotation": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "type"
-      ],
+      "required": ["type"],
       "properties": {
         "type": {
           "type": "string",
-          "enum": [
-            "highlight_box",
-            "arrow",
-            "label",
-            "click_pulse",
-            "drag_arrow",
-            "number_badge"
-          ]
+          "enum": ["highlight_box", "arrow", "label", "click_pulse", "drag_arrow", "number_badge"]
         },
         "text": {
           "type": "string"
@@ -927,10 +837,7 @@
     "annotationPoint": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "x",
-        "y"
-      ],
+      "required": ["x", "y"],
       "properties": {
         "x": {
           "type": "integer"
@@ -943,12 +850,7 @@
     "annotationBox": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "x",
-        "y",
-        "width",
-        "height"
-      ],
+      "required": ["x", "y", "width", "height"],
       "properties": {
         "x": {
           "type": "integer"
@@ -967,15 +869,7 @@
       }
     },
     "value": {
-      "type": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
+      "type": ["string", "number", "integer", "boolean", "object", "array", "null"]
     }
   }
 }

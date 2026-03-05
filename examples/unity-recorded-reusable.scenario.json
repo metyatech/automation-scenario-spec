@@ -4,12 +4,7 @@
   "name": "Unity Recorded Reusable Example",
   "description": "Example scenario shaped like GUI recording output: variable-first hierarchy selectors + multi-strategy UIA/coordinate fallbacks for cross-project reuse.",
   "target": "unity",
-  "tags": [
-    "unity",
-    "recorded",
-    "variable-first",
-    "fallbacks"
-  ],
+  "tags": ["unity", "recorded", "variable-first", "fallbacks"],
   "variables": [
     {
       "id": "unity_window_hint",
@@ -129,4 +124,3 @@
     }
   ]
 }
-
