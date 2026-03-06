@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+### Added
+
+- `animationOutput` definition in schema (gif/webp format, fps, max_duration_seconds, step_ids).
+- `relatedScenario` definition in schema (scenario_id + optional label).
+- `related_scenarios` array at scenario root level.
+- `animation` output type in `outputs` definition.
+- Updated `unity-cross-project.scenario.json` example with animation and related_scenarios.
+
+### Changed
+
 - Added `node` and `cli` domains to `agent-ruleset.json` and refreshed `AGENTS.md`.
 - Added `.editorconfig` for consistent formatting.
 - Replaced `1.0.0` with `2.0.0` as the only production schema in
