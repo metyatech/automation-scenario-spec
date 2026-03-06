@@ -79,6 +79,12 @@
     "extensions": {
       "type": "object",
       "additionalProperties": true
+    },
+    "related_scenarios": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relatedScenario"
+      }
     }
   },
   "$defs": {
@@ -312,6 +318,9 @@
         },
         "trace": {
           "$ref": "#/$defs/traceOutput"
+        },
+        "animation": {
+          "$ref": "#/$defs/animationOutput"
         }
       }
     },
@@ -391,6 +400,52 @@
         "include_variables": {
           "type": "boolean",
           "default": false
+        }
+      }
+    },
+    "animationOutput": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "format": {
+          "type": "string",
+          "enum": ["gif", "webp"]
+        },
+        "fps": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 10
+        },
+        "max_duration_seconds": {
+          "type": "number",
+          "minimum": 0.1
+        },
+        "step_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "If specified, only include screenshots from these steps. If omitted, include all steps."
+        }
+      }
+    },
+    "relatedScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario_id"],
+      "properties": {
+        "scenario_id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "label": {
+          "type": "string"
         }
       }
     },

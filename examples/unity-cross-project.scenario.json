@@ -107,8 +107,14 @@
       "enabled": true,
       "level": "standard",
       "include_variables": false
+    },
+    "animation": {
+      "enabled": false,
+      "format": "gif",
+      "fps": 10
     }
   },
+  "related_scenarios": [{ "scenario_id": "unity-basic", "label": "Unity の基本操作" }],
   "steps": [
     {
       "id": "ensure-unity-window",
