@@ -58,6 +58,5 @@ Use your preferred JSON Schema validator against `schema/scenario.schema.json`.
 
 - License: `LICENSE`
 - Changelog: `CHANGELOG.md`
-- Security Policy: `SECURITY.md`
 - Contributing Guide: `CONTRIBUTING.md`
 - Code of Conduct: `CODE_OF_CONDUCT.md`
